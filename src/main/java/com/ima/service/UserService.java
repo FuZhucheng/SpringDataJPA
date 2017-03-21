@@ -2,6 +2,7 @@ package com.ima.service;
 
 import com.ima.model.User;
 import com.ima.repository.UserRepository;
+import com.ima.utils.CreateIMAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,7 @@ public class UserService {
                 user.setiDouCount((long)300);
                 user.setChargeMoney((long)0);
                 userRepository.save(user);
-                //注册云旺
+                //注册云旺，想体验的就自己打开这个咯
 //                CreateIMAccount.createIMAccount(account);
                 return user;
             }
