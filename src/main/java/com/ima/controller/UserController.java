@@ -6,6 +6,8 @@ import com.ima.model.IDouChange;
 import com.ima.model.User;
 import com.ima.service.AiDouService;
 import com.ima.service.UserService;
+import com.ima.utils.AuthUtil;
+import com.ima.utils.JavaWebToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,6 +47,25 @@ public class UserController {
         }
     }
 
+    //登录
+    @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST}, produces = "text/html;charset=UTF-8")
+    public String login(String account) {
+        User user = userService.login(account);
+
+        DTO dto = new DTO();
+        if (user == null) {
+            dto.code = "-1";
+            dto.msg = "Have not registered";
+        } else {
+            //把用户登录信息放进Session
+            Map<String, Object> loginInfo = new HashMap<>();
+            loginInfo.put("userId", user.getId());
+            String sessionId = JavaWebToken.createJavaWebToken(loginInfo);
+            System.out.println("sessionID"+sessionId);
+            dto.data = sessionId;
+        }
+        return JSON.toJSONString(dto);
+    }
 
     //注册：
     @RequestMapping(value = "/register", method = {RequestMethod.GET, RequestMethod.POST}, produces = "text/html;charset=UTF-8")
@@ -62,5 +83,21 @@ public class UserController {
         }
     }
 
+    //修改昵称
+    @RequestMapping(value = "/updateName", method = {RequestMethod.GET, RequestMethod.POST})
+    public String updateName(HttpServletRequest request, String name) {
+        DTO dto = new DTO();
+        try {
+            Long userId = AuthUtil.getUserId(request);
+            boolean userIsExist = userService.updateName(userId, name);
+            if (userIsExist == false) {
+                dto.code = "-1";
+                dto.msg = "Have not updateAvatar";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return JSON.toJSONString(dto);
+    }
 
 }

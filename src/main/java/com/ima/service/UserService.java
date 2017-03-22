@@ -18,6 +18,11 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public User login(String account) {
+        User user = userRepository.getByAccount(account);
+        System.out.println("userId   :" + user);
+        return user;
+    }
     //注册
     public User register(String account, String name, String sex)  {
         boolean flag;
@@ -42,4 +47,14 @@ public class UserService {
             }
         }
     }
+    //更新昵称
+    public boolean updateName(Long userId, String name) {
+        boolean flag = false;
+        if (userId != null && name != null) {
+            userRepository.updateName(name, userId);
+            flag = true;
+        }
+        return flag;
+    }
+
 }

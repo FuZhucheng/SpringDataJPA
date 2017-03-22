@@ -45,7 +45,6 @@ public class CreateIMAccount {
         } catch (ApiException e) {
             e.printStackTrace();
             System.out.println("IM注册异常");
-
         }
         System.out.println("response Body"+response.getBody());
     }
