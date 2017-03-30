@@ -32,7 +32,7 @@ public class JavaWebToken {
 //        return MacProvider.generateKey();
         //We will sign our JavaWebToken with our ApiKey secret
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary("APP");
+        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary("AiDou");
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
         return signingKey;
     }

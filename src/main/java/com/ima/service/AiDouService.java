@@ -6,6 +6,8 @@ import com.ima.repository.AiDouChangeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by ${符柱成} on 2017/3/21.
  */
@@ -25,5 +27,9 @@ public class AiDouService {
         iDouChange.setiDouCount(registerCount);
         iDouChange.setUser(user);
         aiDouChangeRepository.save(iDouChange);
+    }
+    public List<IDouChange> getHistory(Long id){
+        List<IDouChange> iDouChangeList = aiDouChangeRepository.findById(id);
+        return  iDouChangeList;
     }
 }

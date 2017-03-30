@@ -1,6 +1,8 @@
 package com.ima.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.ima.dao.JedisClient;
 import com.ima.dto.DTO;
 import com.ima.model.IDouChange;
 import com.ima.model.User;
@@ -8,6 +10,7 @@ import com.ima.service.AiDouService;
 import com.ima.service.UserService;
 import com.ima.utils.AuthUtil;
 import com.ima.utils.JavaWebToken;
+import com.ima.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,7 +32,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private AiDouService aiDouService;
-
+    @Autowired
+    private JedisClient jedisClient;
 
     //test：
     @RequestMapping(value = "/test", method = {RequestMethod.GET, RequestMethod.POST}, produces = "text/html;charset=UTF-8")
@@ -99,5 +104,36 @@ public class UserController {
         }
         return JSON.toJSONString(dto);
     }
-
+    //查历史记录
+    @RequestMapping(value = "/findHistory", method = {RequestMethod.GET, RequestMethod.POST})
+    public String findHistory(Long id) {
+        DTO dto = new DTO();
+        List<IDouChange> iDouChangeList = null;
+        System.out.println("jedisClient  :" + jedisClient);
+        try {
+            String resulthget = jedisClient.hget("个人积分记录", id + "");
+            if (resulthget != null) {
+                //字符串转为list
+                System.out.println("有缓存啦啦啦！！！");
+                JSONArray array = JSONArray.parseArray(resulthget);
+                iDouChangeList = (List) array;
+            } else {
+                System.out.println("个人积分记录没查过");
+                iDouChangeList = aiDouService.getHistory(id);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (iDouChangeList == null) {
+            dto.code = "-1";
+            dto.msg = "Have not updateAvatar";
+        }
+        try {
+            String cacheString = JsonUtils.objectToJson(iDouChangeList);
+            jedisClient.hset("个人积分记录", id + "", cacheString);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return JSON.toJSONString(iDouChangeList);
+    }
 }

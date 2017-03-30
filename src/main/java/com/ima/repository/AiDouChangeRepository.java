@@ -18,7 +18,7 @@ public interface AiDouChangeRepository extends JpaRepository<IDouChange, Long> {
     //降序查记录列表
     List<IDouChange> findFirst10ByUser(User user, Sort sort);
 
-
+    List<IDouChange> findById(Long id);
 
 
 }
