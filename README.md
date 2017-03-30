@@ -7,6 +7,7 @@
 ### （二）[J2EE项目系列（三）--Spring Data JPA+Spring+SpringMVC+Maven快速开发（2）多个第三方服务端接入之云旺IM](http://blog.csdn.net/Jack__Frost/article/details/62443796)
 ### （三）[Java-解决实现JPA的hibernate自动建表的编码问题](http://blog.csdn.net/Jack__Frost/article/details/64487024)
 ### （四）[WEB后台--基于Token的WEB后台登录认证机制（并讲解其他认证机制以及cookie和session机制）](http://blog.csdn.net/jack__frost/article/details/64964208)
+### （五）加入了一个单机版redis缓存。大致步骤见工程中的《redis缓存.md》。
 ***
 ###  更多内容，可以访问[JackFrost的博客](http://blog.csdn.net/jack__frost?viewmode=contents)     
 ### 联系方式：jackfrost@fuzhufuzhu.com 
